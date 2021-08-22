@@ -6,9 +6,9 @@ import Footer from '../../Components/Footer'
 import { Link } from 'react-router-dom';
 import api from '../../Services/api';
 import { message } from 'antd';
-import { login } from '../../Services/auth';
 
-function Login() {
+function Cadastro() {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -16,19 +16,18 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await api.post('login', {
+            const response = await api.post('users', {
+                name,
                 email,
                 password
             });
             console.log(response);
             if(response.status === 200) {
-                login(response.data.token);
-                message.destroy("logging");
+                message.success('Cadastro realizado com sucesso!');
             }
 
         } catch(error) {
             console.log(error);
-            message.destroy("logging")
         }
     }
 
@@ -36,9 +35,15 @@ function Login() {
     <ContainerPage>
         <HeaderContainer><h1>Enquadrados</h1></HeaderContainer>
         <ContainerMain>
-            <ContainerLoginCadastro>
-                <h1>Login</h1>
-                <form onSubmit={handleSubmit}>
+          <ContainerLoginCadastro>
+                  <h1>Cadastre-se</h1>                
+                  <form onSubmit={handleSubmit}>
+                  <Input 
+                        placeholder="Nome"
+                        type="text"
+                        onChange = {(e)=> setName(e.target.value)}
+                        required
+                    />
                     <Input 
                         placeholder="Email"
                         onChange = {(e)=> setEmail(e.target.value)}
@@ -50,13 +55,13 @@ function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button className="buttonSubmit" type="submit">Entrar</button>
+                    <button className="buttonSubmit" type="submit">Cadastrar</button>
                 </form>
-            </ContainerLoginCadastro>
-        </ContainerMain>        
+              </ContainerLoginCadastro>
+          </ContainerMain>        
         <Footer></Footer>
     </ContainerPage>
   );
 }
 
-export default Login;
+export default Cadastro;
